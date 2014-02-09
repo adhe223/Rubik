@@ -10,25 +10,16 @@ public:
 	float getTotalScore();
 	float getHeurScore();
 	Cube * getCube();
-	Node * getCheapestNode();
 	bool isSolved();
 
+	int getDistanceTo();
 	bool getDiscovered();
 	void setDiscovered(bool b);
 
 	Node * getRoot();
-	Node * getFrontClock();
-	Node * getFrontCounter();
-	Node * getLeftClock();
-	Node * getLeftCounter();
-	Node * getTopClock();
-	Node * getTopCounter();
-	Node * getRightClock();
-	Node * getRightCounter();
-	Node * getBottomClock();
-	Node * getBottomCounter();
-	Node * getBackClock();
-	Node * getBackCounter();
+
+	//public member variable for ease of access
+	Node * successors[12];
 
 private:
 	bool discovered;
@@ -36,23 +27,7 @@ private:
 	float totalScore;
 	float heurScore;
 	Cube * cube;
-
 	Node * root;
-
-	//Scores of the cubes of all possible moves
-	Node * possMoves[11];
-	/*Node * frontClock;
-	Node * frontCounter;
-	Node * leftClock;
-	Node * leftCounter;
-	Node * topClock;
-	Node * topCounter;
-	Node * rightClock;
-	Node * rightCounter;
-	Node * bottomClock;
-	Node * bottomCounter;
-	Node * backClock;
-	Node * backCounter;*/
 };
 
 #endif

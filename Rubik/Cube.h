@@ -69,7 +69,6 @@ private:
 
 	//Method to update the move history
 	void updateHistory(int move);
-
 };
 
 #endif

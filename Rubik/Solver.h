@@ -7,11 +7,13 @@ class Solver{
 public:
 	Solver();
 	void ida_star(Node * inNode);
+	Node * getCheapestChild(Node * inNode);
 
 private:
 	Node * currentNode;
-	int distance;
+	int distanceTo;
 	float cutoff;
+	double calls;
 };
 
 #endif
