@@ -8,16 +8,16 @@ public:
 	Node(Node * inRoot, Cube * inCube, int inDistance);
 	Node(const Node & inNode);
 
-	float getTotalScore();
-	float getHeurScore();
+	float getTotalScore() const;
+	float getHeurScore() const;
 	Cube * getCube() const;
 	bool isSolved();
 
-	int getDistanceTo();
-	bool getDiscovered();
+	int getDistanceTo() const;
+	bool getDiscovered() const;
 	void setDiscovered(bool b);
 
-	Node * getRoot();
+	Node * getRoot() const;
 
 	//public member variable for ease of access
 	Node * successors[12];
@@ -25,8 +25,6 @@ public:
 private:
 	bool discovered;
 	int distanceTo;
-	float totalScore;
-	float heurScore;
 	Cube * cube;
 	Node * root;
 };

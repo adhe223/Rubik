@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\main.cpp">
+    <ClCompile Include="Solver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Cube.cpp">
+    <ClCompile Include="Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Node.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Solver.cpp">
+    <ClCompile Include="Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Cube.h">
+    <ClInclude Include="Solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Node.h">
+    <ClInclude Include="Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Solver.h">
+    <ClInclude Include="Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

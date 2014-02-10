@@ -10,6 +10,17 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Solver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Solver.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{147B7216-5DE8-45F4-8E3E-C736E9C2B48B}</ProjectGuid>
     <RootNamespace>Rubik</RootNamespace>
@@ -63,17 +74,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Cube.cpp" />
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\main.cpp" />
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Node.cpp" />
-    <ClCompile Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Solver.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Cube.h" />
-    <ClInclude Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Node.h" />
-    <ClInclude Include="..\..\..\..\Alex%27s Documents\Github\Rubik\Rubik\Solver.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

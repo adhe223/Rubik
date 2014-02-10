@@ -532,23 +532,23 @@ void Cube::topCounter() {
 	char temp10 = cube[10];
 	char temp11 = cube[11];
 
-	cube[6] = cube[8];
-	cube[7] = cube[9];
-	cube[10] = cube[4];
-	cube[11] = cube[5];
-	cube[8] = temp10;
-	cube[9] = temp11;
-	cube[4] = temp6;
-	cube[5] = temp7;
+	cube[6] = cube[4];
+	cube[7] = cube[5];
+	cube[10] = cube[8];
+	cube[11] = cube[9];
+	cube[8] = temp6;
+	cube[9] = temp7;
+	cube[4] = temp10;
+	cube[5] = temp11;
 
 	//Will also alter the top
 	char temp0 = cube[0];
 	char temp3 = cube[3];
 
-	cube[0] = cube[2];
-	cube[3] = cube[1];
-	cube[1] = temp0;
-	cube[2] = temp3;
+	cube[0] = cube[1];
+	cube[3] = cube[2];
+	cube[1] = temp3;
+	cube[2] = temp0;
 }
 
 void Cube::rightClock() {

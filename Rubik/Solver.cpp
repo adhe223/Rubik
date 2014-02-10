@@ -6,7 +6,6 @@ Solver::Solver() {
 	calls = 0;
 	currentNode = new Node();
 	distanceTo = 0;
-	minFail = 1000000;
 	//cutoff = currentNode->getHeurScore();
 
 	//ida_star(currentNode);
@@ -45,11 +44,10 @@ void Solver::ida_star(Node * inNode) {
 	return ida_star(cheapestChild);
 }
 
-float Solver::depthFirstSearch(Node * root, float bound) {
-	//cutoff = bound;
+float Solver::depthFirstSearch(Node * root) {
 	distanceTo = root->getDistanceTo();
 	calls++;
-	cout << "Working on call " << calls << endl;
+	//cout << "Working on call " << calls << endl;
 	root->setDiscovered(true);
 
 	if (root->isSolved()) {
@@ -135,9 +133,10 @@ float Solver::depthFirstSearch(Node * root, float bound) {
 	}
 
 	for (int i = 0; i < 12; i++) {
+		float score = root->successors[i]->getTotalScore();
 		if (root->successors[i]->getDiscovered() == false && root->successors[i]->getTotalScore() <= bound) {
 			if (solved != NULL) { return 0; }
-			depthFirstSearch(root->successors[i], bound);
+			depthFirstSearch(root->successors[i]);
 		}
 		else {
 			//All do not meet the boundary. Find the min that doesn't meet the boundary requirement
@@ -147,19 +146,18 @@ float Solver::depthFirstSearch(Node * root, float bound) {
 		}
 	}
 	//What if All the children nodes have been visited without a solution being found?
-	
-
-	return minFail;
+	bound = minFail;
 }
 
 void Solver::IDFS(Node * root) {
 	Node * origRoot = new Node(*root);
-	float bound = root->getTotalScore();
+	bound = root->getTotalScore();
 
 	//for (int i = 1; i < 3; i++) {
 	while (true) {
 		Node * toWorkOn = new Node(*origRoot);
-		bound = depthFirstSearch(toWorkOn, bound);
+		minFail = 1000000000;
+		depthFirstSearch(toWorkOn);
 		if (solved != NULL) {
 			cout << "IDFS has solved the cube!" << endl;
 			solved->getCube()->printCube();
