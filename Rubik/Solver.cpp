@@ -6,9 +6,11 @@ Solver::Solver() {
 	calls = 0;
 	currentNode = new Node();
 	distanceTo = 0;
-	cutoff = currentNode->getHeurScore();
+	//cutoff = currentNode->getHeurScore();
 
-	ida_star(currentNode);
+	//ida_star(currentNode);
+	//depthFirstSearch(currentNode, 2);
+	IDFS(currentNode);
 }
 
 void Solver::ida_star(Node * inNode) {
@@ -17,9 +19,13 @@ void Solver::ida_star(Node * inNode) {
 	distanceTo = currentNode->getDistanceTo();
 	currentNode->setDiscovered(true);
 	cout << "Working on call " << calls << endl;
-	Node * cheapestChild = getCheapestChild(inNode);
 
-	if (inNode->isSolved()) {
+	Node * cheapestChild = getCheapestChild(inNode);
+	if (cheapestChild == NULL) {	//This means that all the successors have been discovered already
+		return ida_star(currentNode->getRoot());
+	}
+
+	if (currentNode->isSolved()) {
 		cout << "Congratulations! The cube has been solved!: " << endl;
 		currentNode->getCube()->printCube();
 		return;
@@ -36,6 +42,130 @@ void Solver::ida_star(Node * inNode) {
 	}
 
 	return ida_star(cheapestChild);
+}
+
+void Solver::depthFirstSearch(Node * root, float bound) {
+	//cutoff = bound;
+	distanceTo = root->getDistanceTo();
+	calls++;
+	cout << "Working on call " << calls << endl;
+	root->setDiscovered(true);
+
+	if (root->isSolved()) { 
+		cout << "Congrats!" << endl;
+		solved = root;
+		return; 
+	}
+	if (root->getDistanceTo() > bound) {
+		//cout << "No solution!" << endl; 
+		return;
+	}
+
+	//Fill the successor nodes
+	//frontClock
+	if (root->successors[0] == NULL)
+	{
+		root->successors[0] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[0]->getCube()->frontClock();
+	}
+
+	//frontCounter
+	if (root->successors[1] == NULL)
+	{
+		root->successors[1] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[1]->getCube()->frontCounter();
+	}
+
+	//leftClock
+	if (root->successors[2] == NULL)
+	{
+		root->successors[2] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[2]->getCube()->leftClock();
+	}
+
+	//leftCounter
+	if (root->successors[3] == NULL) {
+		root->successors[3] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[3]->getCube()->leftCounter();
+	}
+
+	//topClock
+	if (root->successors[4] == NULL) {
+		root->successors[4] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[4]->getCube()->topClock();
+	}
+
+	//topCounter
+	if (root->successors[5] == NULL) {
+		root->successors[5] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[5]->getCube()->topCounter();
+	}
+
+	//rightClock
+	if (root->successors[6] == NULL) {
+		root->successors[6] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[6]->getCube()->rightClock();
+	}
+
+	//rightCounter
+	if (root->successors[7] == NULL) {
+		root->successors[7] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[7]->getCube()->rightCounter();
+	}
+
+	//bottomClock
+	if (root->successors[8] == NULL) {
+		root->successors[8] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[8]->getCube()->bottomClock();
+	}
+
+	//bottomCounter
+	if (root->successors[9] == NULL) {
+		root->successors[9] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[9]->getCube()->bottomCounter();
+	}
+
+	//backClock
+	if (root->successors[10] == NULL) {
+		root->successors[10] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[10]->getCube()->backClock();
+	}
+
+	//backCounter
+	if (root->successors[11] == NULL) {
+		root->successors[11] = new Node(root, new Cube(*root->getCube()), distanceTo + 1);
+		root->successors[11]->getCube()->backCounter();
+	}
+
+	for (int i = 0; i < 12; i++) {
+		if (root->successors[i]->getDiscovered() == false && root->successors[i]->getTotalScore() < bound) {
+			if (solved != NULL) { return; }
+			depthFirstSearch(root->successors[i], bound);
+		}
+		bound = root->getRoot()->getTotalScore();
+		return;
+	}
+}
+
+void Solver::IDFS(Node * root) {
+	Node * origRoot = new Node(*root);
+	float f = root->getDistanceTo() + root->getHeurScore();
+	float bound = 100;
+
+	//for (int i = 1; i < 3; i++) {
+	while (true) {
+		Node * toWorkOn = new Node(*origRoot);
+		depthFirstSearch(toWorkOn, bound);
+		if (solved != NULL) {
+			cout << "IDFS has solved the cube!" << endl;
+			solved->getCube()->printCube();
+			return;
+		}
+		if (getCheapestChild(toWorkOn) == toWorkOn->getRoot()) {	//All children have been discovered
+			bound = getCheapestChild(toWorkOn)->getTotalScore();
+		}
+		//cout << "Depth " << i << " complete, now moving on." << endl;
+	}
 }
 
 Node * Solver::getCheapestChild(Node * inNode) {
@@ -161,7 +291,7 @@ Node * Solver::getCheapestChild(Node * inNode) {
 	else if (minIndex == 11) {
 		return currentNode->successors[11];
 	}
-	else {		//Min index is still -1, return root as all children have been discovered
-		return currentNode->getRoot();
+	else {		//Min index is still -1, return NULL as all children have been discovered
+		return NULL;
 	}
 }

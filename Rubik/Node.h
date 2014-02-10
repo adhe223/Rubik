@@ -6,10 +6,11 @@ class Node {
 public:
 	Node();
 	Node(Node * inRoot, Cube * inCube, int inDistance);
+	Node(const Node & inNode);
 
 	float getTotalScore();
 	float getHeurScore();
-	Cube * getCube();
+	Cube * getCube() const;
 	bool isSolved();
 
 	int getDistanceTo();

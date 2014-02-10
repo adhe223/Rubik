@@ -9,11 +9,15 @@ public:
 	void ida_star(Node * inNode);
 	Node * getCheapestChild(Node * inNode);
 
-private:
+	void depthFirstSearch(Node * root, float bound);
+	void IDFS(Node * root);
+
+	private:
 	Node * currentNode;
 	int distanceTo;
 	float cutoff;
 	double calls;
+	Node * solved;
 };
 
 #endif
