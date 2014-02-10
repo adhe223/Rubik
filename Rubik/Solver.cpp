@@ -6,6 +6,7 @@ Solver::Solver() {
 	calls = 0;
 	currentNode = new Node();
 	distanceTo = 0;
+	minFail = 1000000;
 	//cutoff = currentNode->getHeurScore();
 
 	//ida_star(currentNode);
@@ -44,21 +45,17 @@ void Solver::ida_star(Node * inNode) {
 	return ida_star(cheapestChild);
 }
 
-void Solver::depthFirstSearch(Node * root, float bound) {
+float Solver::depthFirstSearch(Node * root, float bound) {
 	//cutoff = bound;
 	distanceTo = root->getDistanceTo();
 	calls++;
 	cout << "Working on call " << calls << endl;
 	root->setDiscovered(true);
 
-	if (root->isSolved()) { 
+	if (root->isSolved()) {
 		cout << "Congrats!" << endl;
 		solved = root;
-		return; 
-	}
-	if (root->getDistanceTo() > bound) {
-		//cout << "No solution!" << endl; 
-		return;
+		return 0;
 	}
 
 	//Fill the successor nodes
@@ -138,33 +135,37 @@ void Solver::depthFirstSearch(Node * root, float bound) {
 	}
 
 	for (int i = 0; i < 12; i++) {
-		if (root->successors[i]->getDiscovered() == false && root->successors[i]->getTotalScore() < bound) {
-			if (solved != NULL) { return; }
+		if (root->successors[i]->getDiscovered() == false && root->successors[i]->getTotalScore() <= bound) {
+			if (solved != NULL) { return 0; }
 			depthFirstSearch(root->successors[i], bound);
 		}
-		bound = root->getRoot()->getTotalScore();
-		return;
+		else {
+			//All do not meet the boundary. Find the min that doesn't meet the boundary requirement
+			if (root->successors[i]->getTotalScore() < minFail) {
+				minFail = root->successors[i]->getTotalScore();
+			}
+		}
 	}
+	//What if All the children nodes have been visited without a solution being found?
+	
+
+	return minFail;
 }
 
 void Solver::IDFS(Node * root) {
 	Node * origRoot = new Node(*root);
-	float f = root->getDistanceTo() + root->getHeurScore();
-	float bound = 100;
+	float bound = root->getTotalScore();
 
 	//for (int i = 1; i < 3; i++) {
 	while (true) {
 		Node * toWorkOn = new Node(*origRoot);
-		depthFirstSearch(toWorkOn, bound);
+		bound = depthFirstSearch(toWorkOn, bound);
 		if (solved != NULL) {
 			cout << "IDFS has solved the cube!" << endl;
 			solved->getCube()->printCube();
 			return;
 		}
-		if (getCheapestChild(toWorkOn) == toWorkOn->getRoot()) {	//All children have been discovered
-			bound = getCheapestChild(toWorkOn)->getTotalScore();
-		}
-		//cout << "Depth " << i << " complete, now moving on." << endl;
+		cout << "Bound of is too small, increasing to " << bound << " need check more nodes!" << endl;
 	}
 }
 
