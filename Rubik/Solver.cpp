@@ -1,5 +1,7 @@
 #include "Solver.h"
 #include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 Solver::Solver() {
@@ -13,39 +15,23 @@ Solver::Solver() {
 	IDFS(currentNode);
 }
 
-void Solver::ida_star(Node * inNode) {
-	calls++;
-	currentNode = inNode;
-	distanceTo = currentNode->getDistanceTo();
-	currentNode->setDiscovered(true);
-	cout << "Working on call " << calls << endl;
 
-	Node * cheapestChild = getCheapestChild(inNode);
-	if (cheapestChild == NULL) {	//This means that all the successors have been discovered already
-		return ida_star(currentNode->getRoot());
-	}
 
-	if (currentNode->isSolved()) {
-		cout << "Congratulations! The cube has been solved!: " << endl;
-		currentNode->getCube()->printCube();
-		return;
-	}
-	else if (cheapestChild->getHeurScore() > currentNode->getHeurScore()) {
-		cout << "Pruned this tree" << endl;
-
-		if (currentNode->getRoot() == NULL) {
-			cout << "The puzzle is unsolveable!" << endl;
-			return;
+//Helper function
+bool Solver::find(int n, vector<int> vectInts) {
+	bool found = false;
+	for (int i = 0; i < vectInts.size(); i++) {
+		if (vectInts[i] == n) {
+			found = true;
 		}
-
-		return ida_star(currentNode->getRoot());
 	}
 
-	return ida_star(cheapestChild);
+	return found;
 }
 
-float Solver::depthFirstSearch(Node * root) {
+void Solver::depthFirstSearch(Node * root) {
 	distanceTo = root->getDistanceTo();
+	currentNode = root;
 	calls++;
 	//cout << "Working on call " << calls << endl;
 	root->setDiscovered(true);
@@ -53,7 +39,7 @@ float Solver::depthFirstSearch(Node * root) {
 	if (root->isSolved()) {
 		cout << "Congrats!" << endl;
 		solved = root;
-		return 0;
+		return;
 	}
 
 	//Fill the successor nodes
@@ -132,20 +118,47 @@ float Solver::depthFirstSearch(Node * root) {
 		root->successors[11]->getCube()->backCounter();
 	}
 
+	//Add compatible nodes to vector
+	vector<int> compatVect;
+
 	for (int i = 0; i < 12; i++) {
-		float score = root->successors[i]->getTotalScore();
 		if (root->successors[i]->getDiscovered() == false && root->successors[i]->getTotalScore() <= bound) {
-			if (solved != NULL) { return 0; }
-			depthFirstSearch(root->successors[i]);
+			compatVect.push_back(i);
 		}
 		else {
-			//All do not meet the boundary. Find the min that doesn't meet the boundary requirement
 			if (root->successors[i]->getTotalScore() < minFail) {
 				minFail = root->successors[i]->getTotalScore();
 			}
 		}
 	}
-	//What if All the children nodes have been visited without a solution being found?
+
+	//Sort the vector by their score, lowest being the first accessed
+	vector<int> alreadyUsed;
+	vector<int> sortedVect;
+	for (int j = 0; j < compatVect.size(); j++) {
+		int maxScore = -1;
+		int maxIndex = -1;
+		for (int i = 0; i < compatVect.size(); i++) {
+			if (root->successors[i]->getTotalScore() > maxScore && !find(i, alreadyUsed)) {
+				maxScore = root->successors[i]->getTotalScore();
+				maxIndex = i;
+			}
+		}
+
+		sortedVect.push_back(maxIndex);
+		alreadyUsed.push_back(maxIndex);
+	}	
+
+	//for (int i = 0; i < 12; i++) {
+	while (sortedVect.size() > 0) {
+		int i = sortedVect[sortedVect.size() - 1];
+		sortedVect.pop_back();
+
+		float score = root->successors[i]->getTotalScore();
+		if (solved != NULL) { return; }
+		depthFirstSearch(root->successors[i]);
+	}
+
 	bound = minFail;
 }
 
@@ -163,11 +176,48 @@ void Solver::IDFS(Node * root) {
 			solved->getCube()->printCube();
 			return;
 		}
-		cout << "Bound of is too small, increasing to " << bound << " need check more nodes!" << endl;
+		cout << "Bound is too small, increasing to " << bound << " to check more nodes!" << endl;
 	}
 }
 
-Node * Solver::getCheapestChild(Node * inNode) {
+
+
+
+
+
+
+/*void Solver::ida_star(Node * inNode) {
+calls++;
+currentNode = inNode;
+distanceTo = currentNode->getDistanceTo();
+currentNode->setDiscovered(true);
+cout << "Working on call " << calls << endl;
+
+Node * cheapestChild = getCheapestChild(inNode);
+if (cheapestChild == NULL) {	//This means that all the successors have been discovered already
+return ida_star(currentNode->getRoot());
+}
+
+if (currentNode->isSolved()) {
+cout << "Congratulations! The cube has been solved!: " << endl;
+currentNode->getCube()->printCube();
+return;
+}
+else if (cheapestChild->getHeurScore() > currentNode->getHeurScore()) {
+cout << "Pruned this tree" << endl;
+
+if (currentNode->getRoot() == NULL) {
+cout << "The puzzle is unsolveable!" << endl;
+return;
+}
+
+return ida_star(currentNode->getRoot());
+}
+
+return ida_star(cheapestChild);
+}*/
+
+/*Node * Solver::getCheapestChild(Node * inNode) {
 	//Create the possible moves if the node doesn't already have them
 	//frontClock
 	if (currentNode->successors[0] == NULL)
@@ -293,4 +343,4 @@ Node * Solver::getCheapestChild(Node * inNode) {
 	else {		//Min index is still -1, return NULL as all children have been discovered
 		return NULL;
 	}
-}
+}*/

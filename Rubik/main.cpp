@@ -5,7 +5,20 @@
 #include "Cube.h"
 #include "Solver.h"
 #include <iostream>
+#include <vector>
 using namespace std;
+
+//Helper function
+bool find(int n, vector<int> vectInts) {
+	bool found = false;
+	for (int i = 0; i < vectInts.size(); i++) {
+		if (vectInts[i] == n) {
+			found = true;
+		}
+	}
+
+	return found;
+}
 
 int main() {
 	Solver * solver = new Solver();

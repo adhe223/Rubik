@@ -3,7 +3,7 @@
 Node::Node() {
 	root = NULL;
 	cube = new Cube();
-	cube->shuffleCube(6);
+	cube->shuffleCube(5);
 	distanceTo = 0;
 	discovered = false;
 

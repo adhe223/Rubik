@@ -6,6 +6,7 @@
 #include <random>
 #include <ctime>
 #include <iostream>
+#include <map>
 using namespace std;
 
 Cube::Cube() {
@@ -399,6 +400,111 @@ float Cube::heuristicGuess() {
 	float eight = 8.0;
 	guess = numMisplaced / eight;
 	return guess;
+}
+
+/*
+float Cube::heuristicGuess() {
+	float misplaced = 0;
+	float guess;
+
+	//Find the dominant color of each face
+	char f0 = faceColor(0, 1, 2, 3);
+	char f1 = faceColor(4, 5, 12, 13);
+	char f2 = faceColor(6, 7, 14, 15);
+	char f3 = faceColor(8, 9, 16, 17);
+	char f4 = faceColor(10, 11, 18, 19);
+	char f5 = faceColor(20, 21, 22, 23);
+
+	//Tediously count the misplaced tiles
+	if (cube[0] != f0) { misplaced++; }
+	if (cube[1] != f0) { misplaced++; }
+	if (cube[2] != f0) { misplaced++; }
+	if (cube[3] != f0) { misplaced++; }
+
+	if (cube[4] != f1) { misplaced++; }
+	if (cube[5] != f1) { misplaced++; }
+	if (cube[12] != f1) { misplaced++; }
+	if (cube[13] != f1) { misplaced++; }
+
+	if (cube[6] != f2) { misplaced++; }
+	if (cube[7] != f2) { misplaced++; }
+	if (cube[14] != f2) { misplaced++; }
+	if (cube[15] != f2) { misplaced++; }
+
+	if (cube[8] != f3) { misplaced++; }
+	if (cube[9] != f3) { misplaced++; }
+	if (cube[16] != f3) { misplaced++; }
+	if (cube[17] != f3) { misplaced++; }
+
+	if (cube[10] != f4) { misplaced++; }
+	if (cube[11] != f4) { misplaced++; }
+	if (cube[18] != f4) { misplaced++; }
+	if (cube[19] != f4) { misplaced++; }
+
+	if (cube[20] != f5) { misplaced++; }
+	if (cube[21] != f5) { misplaced++; }
+	if (cube[22] != f5) { misplaced++; }
+	if (cube[23] != f5) { misplaced++; }
+
+	//Heuristic is to divide the misplaced tiles by 8
+	float eight = 8.0;
+	guess = misplaced / eight;
+
+	return guess;
+}
+*/
+
+
+char Cube::faceColor(int i1, int i2, int i3, int i4) {
+	//Initialize color counts
+	int y = 0;
+	int o = 0;
+	int b = 0;
+	int r = 0;
+	int g = 0;
+	int w = 0;
+	
+	//Put indices to look at in vector
+	vector<int> indices;
+	indices.push_back(i1);
+	indices.push_back(i2);
+	indices.push_back(i3);
+	indices.push_back(i4);
+
+	//Iterate over indices and count the colors
+	for (int i = 0; i < indices.size(); i++) {
+		if (cube[i] == 'y') { y++; }
+		else if (cube[indices[i]] == 'o') { o++; }
+		else if (cube[indices[i]] == 'b') { b++; }
+		else if (cube[indices[i]] == 'r') { r++; }
+		else if (cube[indices[i]] == 'g') { g++; }
+		else if (cube[indices[i]] == 'w') { w++; }
+	}
+
+	//Move the counts into a vector
+	vector<int> colorCount = { y, o, b, r, g, w };
+	
+	//Find max of counts
+	int maxValue = -1;
+	int maxIndex = -1;
+	for (int i = 0; i < colorCount.size(); i++) {
+		if (colorCount[i] > maxValue) {
+			maxValue = colorCount[i];
+			maxIndex = i;
+		}
+	}
+
+	//Create map that maps the indices integer to the color
+	map<int, char> indexToColor;
+	indexToColor[0] = 'y';
+	indexToColor[1] = 'o';
+	indexToColor[2] = 'b';
+	indexToColor[3] = 'r';
+	indexToColor[4] = 'g';
+	indexToColor[5] = 'w';
+
+	//Return the color that dominates the face
+	return indexToColor[maxIndex];
 }
 
 void Cube::frontClock() {

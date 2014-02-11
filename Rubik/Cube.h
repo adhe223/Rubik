@@ -17,6 +17,7 @@ public:
 
 	//Get guess of the heuristic
 	float heuristicGuess();
+	//float improvedHeur();
 
 	/*
 	Function that allows for the user to input moves manually. Takes in a string
@@ -69,6 +70,9 @@ private:
 
 	//Method to update the move history
 	void updateHistory(int move);
+
+	//Heuristic helper
+	char faceColor(int i1, int i2, int i3, int i4);
 };
 
 #endif

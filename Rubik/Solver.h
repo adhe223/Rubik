@@ -2,17 +2,21 @@
 #define SOLVER_H
 
 #include "Node.h"
+#include <vector>
 
 class Solver{
 public:
 	Solver();
-	void ida_star(Node * inNode);
-	Node * getCheapestChild(Node * inNode);
+	//void ida_star(Node * inNode);
+	//Node * getCheapestChild(Node * inNode);
 
-	float depthFirstSearch(Node * root);
+	void depthFirstSearch(Node * root);
 	void IDFS(Node * root);
 
-	private:
+
+private:
+	bool find(int n, std::vector<int> vectInts);
+
 	Node * currentNode;
 	int distanceTo;
 	double calls;
